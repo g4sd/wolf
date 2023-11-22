@@ -47,6 +47,7 @@ def init(model_name, log_name):
     if TEST:
         import os
         eval_tasks = 'wikitext'
+        #model_name = r'C:\Users\Administrator\.cache\huggingface\hub\models--facebook--opt-125m\snapshots\3d2b5f275bdf882b8775f902e1bfdb790e2cfc32'
         model_name = 'facebook/opt-125m'
         #os.environ["http_proxy"] = "http://127.0.0.1:1080" 
         #os.environ["https_proxy"] = "http://127.0.0.1:1080"
@@ -63,6 +64,7 @@ def init(model_name, log_name):
 
     # load model and tokenizer
     elif model_name == "bigscience/bloomz-7b1":
+        model_name = '/home/cc/huggingface/hub/models--bigscience--bloomz-7b1/snapshots/2f4c4f3ebcf171dbbe2bae989ea2d2f3d3486a97/'
         from transformers.models.bloom.modeling_bloom import BloomForCausalLM
         from transformers.models.bloom.tokenization_bloom_fast import BloomTokenizerFast
         print("Loading model...")
@@ -70,6 +72,7 @@ def init(model_name, log_name):
         print("Loading tokenizer...")
         tokenizer = BloomTokenizerFast.from_pretrained(model_name, **tokenizer_kwargs)
     elif model_name == "gpt2-xl":
+        model_name = '/home/cc/huggingface/hub/models--gpt2-xl/snapshots/33cdb5c0db5423c1879b1b9f16c352988e8754a8/'
         from transformers.models.gpt2.modeling_gpt2 import GPT2LMHeadModel
         from transformers.models.gpt2.tokenization_gpt2_fast import GPT2TokenizerFast
         print("Loading model...")
@@ -77,6 +80,10 @@ def init(model_name, log_name):
         print("Loading tokenizer...")
         tokenizer = GPT2TokenizerFast.from_pretrained(model_name, **tokenizer_kwargs)
     elif model_name == "facebook/opt-6.7b" or model_name == "facebook/opt-125m":
+        if model_name == 'facebook/opt-125m':
+            model_name = '/home/cc/huggingface/hub/models--facebook--opt-125m/snapshots/27dcfa74d334bc871f3234de431e71c6eeba5dd6/'
+        else:
+            model_name = '/home/cc/huggingface/hub/models--facebook--opt-6.7b/snapshots/a45aa65bbeb77c1558bc99bedc6779195462dab0/'
         from transformers.models.opt.modeling_opt import OPTForCausalLM
         from transformers import AutoTokenizer
         print("Loading model...")

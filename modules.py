@@ -107,8 +107,8 @@ class qbase(modulebase):
         self.point_1_a = torch.tensor(_quan_point_arg[self.config['encoding_1']], device=self.device, dtype=torch.int16)
         self.point_2_a = torch.tensor(_quan_point_arg[self.config['encoding_2']], device=self.device, dtype=torch.int16)
         
-        self.scale_1_count = self.scale_1.numel() # scale 1 搜索数量
-        self.scale_2_count = self.scale_2.numel() # scale 2 搜索数量
+        self.scale_1_count = self.scale_1.numel() # scale 1
+        self.scale_2_count = self.scale_2.numel() # scale 2
         
         scale_1_repeated = self.scale_1.view(self.scale_1_count, 1).repeat(1, self.scale_2_count).flatten()
         scale_2_repeated = self.scale_2.view(1, self.scale_2_count).repeat(self.scale_1_count, 1).flatten()
@@ -440,7 +440,7 @@ class adderror(modulebase):
         #vmask = (1 << self.config['error_high']) - (1 << self.config['error_low'])
 
         state['err_xor'] = err_mask * err_fault
-        state['err_xor2'] = err_mask * ~err_fault # 一半是stuck at right
+        state['err_xor2'] = err_mask * ~err_fault
     
     def process_error(self, state):
         qtensor: torch.Tensor = state['qtensor']
@@ -480,7 +480,7 @@ class adderrorq(adderror):
         err_mask = (err_mask * torch.pow(2, bit_slice)).sum(dim=1, dtype=torch.short).view_as(qtensor)
         
         err_fault = torch.randint_like(qtensor, 2).bool()
-        # 这里bug
+        #
 
         #vmask = (1 << self.config['error_high']) - (1 << self.config['error_low'])
 
@@ -968,13 +968,6 @@ class wrapper:
         setattr(module, 'forward', wrapped_forward)
 '''
 
-'''
-设计:
-1. 按bit_width分组权重的bit作为mask输入
-2. mask输出再补0变成nx512
-3. 按照每行的总数量平均取值
-4. 恢复到原来的数据
-'''
 class flower(hashmodule):
 
     default_config = {
